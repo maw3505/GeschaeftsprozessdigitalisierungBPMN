@@ -25,6 +25,9 @@ hs_err_pid*
 
 
 # Camunda gitignore
+
+
+
 *.swp
 *.*~
 project.lock.json
