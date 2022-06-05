@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0fy7qzg" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+  <decision id="Decision_10uhf24" name="Kompensation">
+    <informationRequirement id="InformationRequirement_112gdh4">
+      <requiredInput href="#InputData_1gcwzsb" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0wut6hn">
+      <requiredInput href="#InputData_1a59s8z" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_123icks">
+      <input id="Input_1" label="Vorlaufzeit">
+        <inputExpression id="InputExpression_1" typeRef="integer">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_059nu1n" label="Vorlaufzeit">
+        <inputExpression id="LiteralExpression_0xdph95" typeRef="integer">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0gu6yk8" label="Kundenstatus">
+        <inputExpression id="LiteralExpression_0r746qp" typeRef="string">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Kompensation" typeRef="double" />
+      <rule id="DecisionRule_15lhbpn">
+        <inputEntry id="UnaryTests_1uy42lc">
+          <text>&lt;14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ak3okn">
+          <text>&gt;7</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0egubk9">
+          <text>Gold</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0r1i1bk">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_04dyko0">
+        <inputEntry id="UnaryTests_1ne4adm">
+          <text>&lt;14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_050vtga">
+          <text>&gt;7</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_18t15ek">
+          <text>Silber</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_03dosfm">
+          <text>0.1</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_16dwls8">
+        <inputEntry id="UnaryTests_03zk6af">
+          <text>&lt;14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1lbkb2m">
+          <text>&gt;7</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0y98v6z">
+          <text>Bronze</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_13k01fi">
+          <text>0.2</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0t9lumu">
+        <inputEntry id="UnaryTests_0pns5lz">
+          <text>&lt;7</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_06dit87">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1t6ee8z">
+          <text>Gold</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_12xyc28">
+          <text>0.1</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_00emgn6">
+        <inputEntry id="UnaryTests_1xuwjxt">
+          <text>&lt;7</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1nin5sg">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_02i68o0">
+          <text>Silber</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_156r06i">
+          <text>0.2</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0sjhbu1">
+        <inputEntry id="UnaryTests_0zyrjou">
+          <text>&lt;7</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1g3pusn">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1gi0q3r">
+          <text>Bronze</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ozas03">
+          <text>0.3</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0nsk5nb">
+        <inputEntry id="UnaryTests_0ff6lfi">
+          <text>&lt;14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1uoyq5m">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0kqrbll">
+          <text>Neu</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0gnqo2s">
+          <text>0.5</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1g5dods">
+        <inputEntry id="UnaryTests_0jkj16k">
+          <text>&gt;14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_15nhv92">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0s638vv">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_170wkr6">
+          <text>0</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_1gcwzsb" name="Vorlaufzeit" />
+  <inputData id="InputData_1a59s8z" name="Kundenstatus" />
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_10uhf24">
+        <dc:Bounds height="80" width="180" x="280" y="100" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_19hapvp" dmnElementRef="InputData_1gcwzsb">
+        <dc:Bounds height="45" width="125" x="157" y="337" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_0xicexe" dmnElementRef="InformationRequirement_112gdh4">
+        <di:waypoint x="220" y="337" />
+        <di:waypoint x="340" y="200" />
+        <di:waypoint x="340" y="180" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_141i3as" dmnElementRef="InputData_1a59s8z">
+        <dc:Bounds height="45" width="125" x="417" y="337" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1ajinvc" dmnElementRef="InformationRequirement_0wut6hn">
+        <di:waypoint x="480" y="337" />
+        <di:waypoint x="400" y="200" />
+        <di:waypoint x="400" y="180" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

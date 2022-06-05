@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_1y19pqv" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+  <decision id="Decision_02qpnd0" name="Mahnstufe">
+    <informationRequirement id="InformationRequirement_07i1z5d">
+      <requiredInput href="#InputData_0qldrkk" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0lzfobe">
+      <input id="InputClause_1taxgia" label="Überfällige Zeit in Tagen">
+        <inputExpression id="LiteralExpression_1f1v747" typeRef="integer">
+          <text></text>
+        </inputExpression>
+      </input>
+      <input id="Input_1" label="Überfällige Zeit in Tagen">
+        <inputExpression id="InputExpression_1" typeRef="integer">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Mahnstufe" typeRef="integer" biodi:width="192" />
+      <rule id="DecisionRule_0y31r03">
+        <description>Schriftliche Zahlungserinnerung</description>
+        <inputEntry id="UnaryTests_179nktt">
+          <text>&gt;0</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qze39q">
+          <text>&lt;14</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_14zjguw">
+          <text>1</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1u7wf8o">
+        <description>Mahngebühren</description>
+        <inputEntry id="UnaryTests_0gd00n4">
+          <text>&gt;=14</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_07cn5a1">
+          <text>&lt;45</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1fe0reo">
+          <text>2</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0n82iih">
+        <description>Vollstreckungsandrohung</description>
+        <inputEntry id="UnaryTests_1fv928g">
+          <text>&gt;=45</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_08gfi6a">
+          <text>&lt;67</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ri0gb5">
+          <text>3</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="InputData_0qldrkk" name="Überfällige Zeit" />
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_02qpnd0">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1bb7z9i" dmnElementRef="InputData_0qldrkk">
+        <dc:Bounds height="45" width="125" x="187" y="337" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1lap8qt" dmnElementRef="InformationRequirement_07i1z5d">
+        <di:waypoint x="250" y="337" />
+        <di:waypoint x="250" y="200" />
+        <di:waypoint x="250" y="180" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
