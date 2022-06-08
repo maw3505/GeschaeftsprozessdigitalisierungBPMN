@@ -1,4 +1,4 @@
-package edu.thi.proj.gpd_BPMN;
+package edu.thi.java.GDP;
 
 import java.util.logging.Logger;
 
