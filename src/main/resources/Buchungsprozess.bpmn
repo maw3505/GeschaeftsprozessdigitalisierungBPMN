@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_152fjyw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_152fjyw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Buchungsprozess">
     <bpmn:participant id="Participant_0nzzd8e" name="Buchungsprozess" processRef="buchungsprozess" />
     <bpmn:participant id="Participant_0a8kwji" name="Terminüberprüfungsprozess" processRef="terminueberpruefungsprozess" />
@@ -11,6 +11,48 @@
     <bpmn:messageFlow id="Flow_0d87gfh" sourceRef="Event_0lndl5b" targetRef="Event_00weci7" />
   </bpmn:collaboration>
   <bpmn:process id="buchungsprozess" name="" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Kunde will Termin buchen">
+      <bpmn:outgoing>Flow_1n4ex1j</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:eventBasedGateway id="Gateway_0gj4t9e">
+      <bpmn:incoming>Flow_0rd3rrj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1h5m4cv</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1p1u7pn</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="Event_1rfnnme" name="Alternativterminvorschlag erhalten">
+      <bpmn:incoming>Flow_1h5m4cv</bpmn:incoming>
+      <bpmn:outgoing>Flow_0o0d622</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1ffeydm" messageRef="Message_0ml8npa" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Event_1m7tcli" name="Terminbestätigung erhalten">
+      <bpmn:incoming>Flow_1p1u7pn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ciazft</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_08c4ueo" messageRef="Message_1y6bq67" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="Gateway_1eyvgx5" name="Termin angenommen?">
+      <bpmn:incoming>Flow_0bthcu6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qtt45s</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1rdzvmc</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_1amz3g0">
+      <bpmn:incoming>Flow_0cvxdz8</bpmn:incoming>
+      <bpmn:incoming>Flow_1rdzvmc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mn4c68</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="Event_0epp1ej" name="Termin absage senden">
+      <bpmn:incoming>Flow_1mn4c68</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0nvf795" messageRef="Message_0vpt2nf" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminAbsage&#34;).correlateWithResult()}" />
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_0azonc7">
+      <bpmn:incoming>Flow_0ciazft</bpmn:incoming>
+      <bpmn:incoming>Flow_15rlarp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dw6pl1</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:intermediateThrowEvent id="Event_18syvev" name="Termin zusage senden">
+      <bpmn:incoming>Flow_1qtt45s</bpmn:incoming>
+      <bpmn:outgoing>Flow_15rlarp</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1i6j9oo" messageRef="Message_1l2d7aq" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminZusage&#34;).correlateWithResult()}" />
+    </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_1h5m4cv" sourceRef="Gateway_0gj4t9e" targetRef="Event_1rfnnme" />
     <bpmn:sequenceFlow id="Flow_1p1u7pn" sourceRef="Gateway_0gj4t9e" targetRef="Event_1m7tcli" />
     <bpmn:sequenceFlow id="Flow_0o0d622" sourceRef="Event_1rfnnme" targetRef="Activity_1oe3uz3" />
@@ -27,23 +69,47 @@
     <bpmn:sequenceFlow id="Flow_1dw6pl1" sourceRef="Gateway_0azonc7" targetRef="Activity_0f0jxi9" />
     <bpmn:sequenceFlow id="Flow_15rlarp" sourceRef="Event_18syvev" targetRef="Gateway_0azonc7" />
     <bpmn:sequenceFlow id="Flow_0i6742b" sourceRef="Activity_0f0jxi9" targetRef="Activity_0jw6tj2" />
+    <bpmn:endEvent id="Event_0xlpz6l" name="Kunde hat Termin gebucht">
+      <bpmn:incoming>Flow_1ns6rwt</bpmn:incoming>
+    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1ns6rwt" sourceRef="Event_1gqty1c" targetRef="Event_0xlpz6l" />
     <bpmn:sequenceFlow id="Flow_0i5wa7b" sourceRef="Activity_0jw6tj2" targetRef="Event_0q4kxsy" />
-    <bpmn:sequenceFlow id="Flow_0rd3rrj" sourceRef="Event_0lndl5b" targetRef="Gateway_0gj4t9e" />
-    <bpmn:sequenceFlow id="Flow_1n4ex1j" sourceRef="StartEvent_1" targetRef="Activity_1i1b3ts" />
-    <bpmn:sequenceFlow id="Flow_0xcwomu" sourceRef="Activity_1i1b3ts" targetRef="Event_0lndl5b" />
+    <bpmn:userTask id="Activity_0jw6tj2" name="Termin stornieren">
+      <bpmn:incoming>Flow_0i6742b</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i5wa7b</bpmn:outgoing>
+    </bpmn:userTask>
     <bpmn:boundaryEvent id="Event_1gqty1c" name="Termin Zeitpunkt" attachedToRef="Activity_0jw6tj2">
       <bpmn:outgoing>Flow_1ns6rwt</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0lj2xz7">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
+    <bpmn:endEvent id="Event_0q4kxsy" name="Stornierung senden">
+      <bpmn:incoming>Flow_0i5wa7b</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_17s4dhb" messageRef="Message_09kthsn" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;stornierung&#34;).correlateWithResult()}" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0rd3rrj" sourceRef="Event_0lndl5b" targetRef="Gateway_0gj4t9e" />
+    <bpmn:intermediateThrowEvent id="Event_0lndl5b" name="Ternim Anfrage senden">
+      <bpmn:incoming>Flow_0xcwomu</bpmn:incoming>
+      <bpmn:outgoing>Flow_0rd3rrj</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0lqethg" messageRef="Message_19i52tq" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;NeueTerminAnfrage&#34;).correlateWithResult()}" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:userTask id="Activity_0f0jxi9" name="Termin eintragen">
+      <bpmn:incoming>Flow_1dw6pl1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i6742b</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_1oe3uz3" name="Terminentscheidung treffen">
+      <bpmn:incoming>Flow_0o0d622</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bthcu6</bpmn:outgoing>
+    </bpmn:userTask>
     <bpmn:boundaryEvent id="Event_03he34v" name="24 stunden" attachedToRef="Activity_1oe3uz3">
       <bpmn:outgoing>Flow_0cvxdz8</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0xyeyrn">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1n4ex1j" sourceRef="StartEvent_1" targetRef="Activity_1i1b3ts" />
+    <bpmn:sequenceFlow id="Flow_0xcwomu" sourceRef="Activity_1i1b3ts" targetRef="Event_0lndl5b" />
     <bpmn:userTask id="Activity_1i1b3ts" name="Terminanfrage erstellen">
       <bpmn:extensionElements>
         <camunda:formData>
@@ -57,83 +123,6 @@
       <bpmn:incoming>Flow_1n4ex1j</bpmn:incoming>
       <bpmn:outgoing>Flow_0xcwomu</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_1oe3uz3" name="Terminentscheidung treffen">
-      <bpmn:incoming>Flow_0o0d622</bpmn:incoming>
-      <bpmn:outgoing>Flow_0bthcu6</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Activity_0f0jxi9" name="Termin eintragen">
-      <bpmn:incoming>Flow_1dw6pl1</bpmn:incoming>
-      <bpmn:outgoing>Flow_0i6742b</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:intermediateThrowEvent id="Event_0lndl5b" name="Ternim Anfrage senden">
-      <bpmn:incoming>Flow_0xcwomu</bpmn:incoming>
-      <bpmn:outgoing>Flow_0rd3rrj</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0lqethg" messageRef="Message_19i52tq" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;NeueTerminAnfrage&#34;).setVariable(&#34;Datum&#34;, datum).correlateWithResult()}" />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:endEvent id="Event_0q4kxsy" name="Stornierung senden">
-      <bpmn:incoming>Flow_0i5wa7b</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_17s4dhb" messageRef="Message_09kthsn" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;stornierung&#34;).correlateWithResult()}" />
-    </bpmn:endEvent>
-    <bpmn:userTask id="Activity_0jw6tj2" name="Termin stornieren">
-      <bpmn:incoming>Flow_0i6742b</bpmn:incoming>
-      <bpmn:outgoing>Flow_0i5wa7b</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:endEvent id="Event_0xlpz6l" name="Kunde hat Termin gebucht">
-      <bpmn:incoming>Flow_1ns6rwt</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:intermediateThrowEvent id="Event_18syvev" name="Termin zusage senden">
-      <bpmn:incoming>Flow_1qtt45s</bpmn:incoming>
-      <bpmn:outgoing>Flow_15rlarp</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1i6j9oo" messageRef="Message_1l2d7aq" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminZusage&#34;).correlateWithResult()}" />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:exclusiveGateway id="Gateway_0azonc7">
-      <bpmn:incoming>Flow_0ciazft</bpmn:incoming>
-      <bpmn:incoming>Flow_15rlarp</bpmn:incoming>
-      <bpmn:outgoing>Flow_1dw6pl1</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:endEvent id="Event_0epp1ej" name="Termin absage senden">
-      <bpmn:incoming>Flow_1mn4c68</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0nvf795" messageRef="Message_0vpt2nf" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminAbsage&#34;).correlateWithResult()}" />
-    </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_1amz3g0">
-      <bpmn:incoming>Flow_0cvxdz8</bpmn:incoming>
-      <bpmn:incoming>Flow_1rdzvmc</bpmn:incoming>
-      <bpmn:outgoing>Flow_1mn4c68</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:exclusiveGateway id="Gateway_1eyvgx5" name="Termin angenommen?">
-      <bpmn:incoming>Flow_0bthcu6</bpmn:incoming>
-      <bpmn:outgoing>Flow_1qtt45s</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1rdzvmc</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:intermediateCatchEvent id="Event_1m7tcli" name="Terminbestätigung erhalten">
-      <bpmn:incoming>Flow_1p1u7pn</bpmn:incoming>
-      <bpmn:outgoing>Flow_0ciazft</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_08c4ueo" messageRef="Message_1y6bq67" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:intermediateCatchEvent id="Event_1rfnnme" name="Alternativterminvorschlag erhalten">
-      <bpmn:incoming>Flow_1h5m4cv</bpmn:incoming>
-      <bpmn:outgoing>Flow_0o0d622</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1ffeydm" messageRef="Message_0ml8npa" />
-    </bpmn:intermediateCatchEvent>
-    <bpmn:eventBasedGateway id="Gateway_0gj4t9e">
-      <bpmn:incoming>Flow_0rd3rrj</bpmn:incoming>
-      <bpmn:outgoing>Flow_1h5m4cv</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1p1u7pn</bpmn:outgoing>
-    </bpmn:eventBasedGateway>
-    <bpmn:startEvent id="StartEvent_1" name="Kunde will Termin buchen">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="kunde" label="Kunde" type="string" />
-          <camunda:formField id="kundenStatus" label="KundenStatus" type="enum">
-            <camunda:value id="gold" name="Gold" />
-            <camunda:value id="silber" name="Silber" />
-            <camunda:value id="bronze" name="Bronze" />
-            <camunda:value id="neu" name="Neu" />
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_1n4ex1j</bpmn:outgoing>
-    </bpmn:startEvent>
   </bpmn:process>
   <bpmn:process id="terminueberpruefungsprozess" isExecutable="true">
     <bpmn:intermediateCatchEvent id="Event_13zbttv" name="Termin zusage erhalten">
@@ -154,12 +143,7 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="Datum" label="datum" type="date" defaultValue="${datum}" />
         </camunda:formData>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="Datum">${Datum}</camunda:inputParameter>
-          <camunda:outputParameter name="Datum">${Datum}</camunda:outputParameter>
-        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0lgtjqa</bpmn:incoming>
       <bpmn:outgoing>Flow_01duwuj</bpmn:outgoing>
@@ -397,13 +381,13 @@
       <bpmndi:BPMNShape id="Event_1rfnnme_di" bpmnElement="Event_1rfnnme">
         <dc:Bounds x="1092" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1066" y="275" width="88" height="27" />
+          <dc:Bounds x="1067" y="275" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_14abiph_di" bpmnElement="Event_1m7tcli">
         <dc:Bounds x="1012" y="522" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="986" y="492" width="89" height="27" />
+          <dc:Bounds x="985" y="492" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1eyvgx5_di" bpmnElement="Gateway_1eyvgx5" isMarkerVisible="true">
@@ -418,7 +402,7 @@
       <bpmndi:BPMNShape id="Event_13f3zdn_di" bpmnElement="Event_0epp1ej">
         <dc:Bounds x="1452" y="432" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1435" y="402" width="72" height="27" />
+          <dc:Bounds x="1434" y="402" width="73" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0azonc7_di" bpmnElement="Gateway_0azonc7" isMarkerVisible="true">
@@ -427,7 +411,7 @@
       <bpmndi:BPMNShape id="Event_0zvcx9a_di" bpmnElement="Event_18syvev">
         <dc:Bounds x="1522" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1505" y="282" width="71" height="27" />
+          <dc:Bounds x="1504" y="282" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0xlpz6l_di" bpmnElement="Event_0xlpz6l">
@@ -448,7 +432,7 @@
       <bpmndi:BPMNShape id="Event_1fz1x9y_di" bpmnElement="Event_0lndl5b">
         <dc:Bounds x="492" y="412" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="475" y="382" width="74" height="27" />
+          <dc:Bounds x="474" y="382" width="75" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tsl1jx_di" bpmnElement="Activity_0f0jxi9">
