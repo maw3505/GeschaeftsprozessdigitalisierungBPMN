@@ -4,9 +4,6 @@
     <informationRequirement id="InformationRequirement_1jhsgiv">
       <requiredInput href="#InputData_0l8zpoh" />
     </informationRequirement>
-    <informationRequirement id="InformationRequirement_05romzh">
-      <requiredInput href="#InputData_1cm4jo2" />
-    </informationRequirement>
     <decisionTable id="DecisionTable_0lmtt92">
       <input id="InputClause_1tllc1k" label="Kundenstatus">
         <inputExpression id="LiteralExpression_1lzqn3y" typeRef="string">
@@ -52,27 +49,18 @@
     </decisionTable>
   </decision>
   <inputData id="InputData_0l8zpoh" name="Kundenstatus" />
-  <inputData id="InputData_1cm4jo2" name="Vorlaufzeit" />
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
       <dmndi:DMNShape dmnElementRef="Decision_04crs40">
         <dc:Bounds height="80" width="180" x="160" y="100" />
       </dmndi:DMNShape>
       <dmndi:DMNShape id="DMNShape_08gb2xf" dmnElementRef="InputData_0l8zpoh">
-        <dc:Bounds height="45" width="125" x="297" y="337" />
+        <dc:Bounds height="45" width="125" x="187" y="327" />
       </dmndi:DMNShape>
       <dmndi:DMNEdge id="DMNEdge_1ogw0l1" dmnElementRef="InformationRequirement_1jhsgiv">
-        <di:waypoint x="360" y="337" />
-        <di:waypoint x="280" y="200" />
-        <di:waypoint x="280" y="180" />
-      </dmndi:DMNEdge>
-      <dmndi:DMNShape id="DMNShape_0xv6gxa" dmnElementRef="InputData_1cm4jo2">
-        <dc:Bounds height="45" width="125" x="57" y="337" />
-      </dmndi:DMNShape>
-      <dmndi:DMNEdge id="DMNEdge_0kcud8j" dmnElementRef="InformationRequirement_05romzh">
-        <di:waypoint x="120" y="337" />
-        <di:waypoint x="220" y="200" />
-        <di:waypoint x="220" y="180" />
+        <di:waypoint x="250" y="327" />
+        <di:waypoint x="250" y="200" />
+        <di:waypoint x="250" y="180" />
       </dmndi:DMNEdge>
     </dmndi:DMNDiagram>
   </dmndi:DMNDI>
