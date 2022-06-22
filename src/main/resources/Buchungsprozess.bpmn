@@ -141,10 +141,6 @@
     <bpmn:sequenceFlow id="Flow_0xawqm3" sourceRef="Event_088terw" targetRef="Event_1pgjg5c" />
     <bpmn:sequenceFlow id="Flow_1xgf1fq" sourceRef="Event_0i566so" targetRef="Event_0bz9cui" />
     <bpmn:sequenceFlow id="Flow_0wxx0vt" sourceRef="Event_1pgjg5c" targetRef="Event_1f7xjff" />
-    <bpmn:userTask id="Activity_0f0jxi9" name="Termin eintragen">
-      <bpmn:incoming>Flow_0ciazft</bpmn:incoming>
-      <bpmn:outgoing>Flow_1xz4xue</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1xz4xue" sourceRef="Activity_0f0jxi9" targetRef="Gateway_0nzgd2f" />
     <bpmn:sequenceFlow id="Flow_15rlarp" sourceRef="Event_18syvev" targetRef="Gateway_0g8ia6v" />
     <bpmn:sequenceFlow id="Flow_0ciazft" sourceRef="Event_1m7tcli" targetRef="Activity_0f0jxi9" />
@@ -162,6 +158,10 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="Activity_0f0jxi9" name="Termin speichern" camunda:class="edu.thi.java.servicetask.TerminSpeichern">
+      <bpmn:incoming>Flow_0ciazft</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xz4xue</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:process id="terminueberpruefungsprozess" isExecutable="true">
     <bpmn:intermediateCatchEvent id="Event_13zbttv" name="Termin zusage erhalten">
@@ -717,11 +717,11 @@
           <dc:Bounds x="2067" y="525" width="87" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_016mrjd_di" bpmnElement="Activity_0f0jxi9">
-        <dc:Bounds x="1630" y="380" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0g8ia6v_di" bpmnElement="Gateway_0g8ia6v" isMarkerVisible="true">
         <dc:Bounds x="615" y="375" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1lo1k1n_di" bpmnElement="Activity_0f0jxi9">
+        <dc:Bounds x="1630" y="380" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1am0et9_di" bpmnElement="Event_03he34v">
         <dc:Bounds x="1192" y="322" width="36" height="36" />

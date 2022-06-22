@@ -9,7 +9,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 
-public class TerminEintragen implements JavaDelegate{
+public class TerminSpeichern implements JavaDelegate{
 
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
@@ -17,7 +17,7 @@ public class TerminEintragen implements JavaDelegate{
 		//Date termin = new Date();
 		//System.out.println("Termin vom " + termin + " wurde eingetragen");
 		
-		System.out.println("Termin wurde eingetragen");
+		System.out.println("Termin wurde beim Kunden eignetragen");
 	}
 
 
