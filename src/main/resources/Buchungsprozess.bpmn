@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_152fjyw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_152fjyw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Buchungsprozess">
     <bpmn:participant id="Participant_0nzzd8e" name="Buchungsprozess" processRef="buchungsprozess" />
     <bpmn:participant id="Participant_0a8kwji" name="Terminüberprüfungsprozess" processRef="terminueberpruefungsprozess" />
     <bpmn:participant id="Participant_17odgng" name="Kunde" />
-    <bpmn:messageFlow id="Flow_0zlq9kj" sourceRef="Activity_0i2064v" targetRef="Event_1rfnnme" />
+    <bpmn:messageFlow id="Flow_0zlq9kj" sourceRef="Event_0xniwda" targetRef="Event_1rfnnme" />
     <bpmn:messageFlow id="Flow_0n3fg72" sourceRef="Event_0epp1ej" targetRef="Event_1n0bztz" />
     <bpmn:messageFlow id="Flow_1ijwz5y" sourceRef="Event_18syvev" targetRef="Event_13zbttv" />
     <bpmn:messageFlow id="Flow_0d87gfh" sourceRef="Event_0lndl5b" targetRef="Event_00weci7" />
@@ -29,14 +29,14 @@
       <bpmn:outgoing>Flow_1n4ex1j</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:eventBasedGateway id="Gateway_0gj4t9e">
-      <bpmn:incoming>Flow_0rd3rrj</bpmn:incoming>
+      <bpmn:incoming>Flow_0l3q82s</bpmn:incoming>
       <bpmn:outgoing>Flow_1h5m4cv</bpmn:outgoing>
       <bpmn:outgoing>Flow_1p1u7pn</bpmn:outgoing>
     </bpmn:eventBasedGateway>
     <bpmn:intermediateCatchEvent id="Event_1rfnnme" name="Alternativterminvorschlag erhalten">
       <bpmn:incoming>Flow_1h5m4cv</bpmn:incoming>
       <bpmn:outgoing>Flow_0o0d622</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1ffeydm" messageRef="Message_0ml8npa" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1ffeydm" messageRef="Message_0q37n7i" />
     </bpmn:intermediateCatchEvent>
     <bpmn:intermediateCatchEvent id="Event_1m7tcli" name="Terminbestätigung erhalten">
       <bpmn:incoming>Flow_1p1u7pn</bpmn:incoming>
@@ -57,11 +57,6 @@
       <bpmn:incoming>Flow_1mn4c68</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0nvf795" messageRef="Message_0vpt2nf" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminAbsage&#34;).correlateWithResult()}" />
     </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_0azonc7">
-      <bpmn:incoming>Flow_0ciazft</bpmn:incoming>
-      <bpmn:incoming>Flow_15rlarp</bpmn:incoming>
-      <bpmn:outgoing>Flow_1dw6pl1</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:intermediateThrowEvent id="Event_18syvev" name="Termin zusage senden">
       <bpmn:incoming>Flow_1qtt45s</bpmn:incoming>
       <bpmn:outgoing>Flow_15rlarp</bpmn:outgoing>
@@ -69,10 +64,15 @@
     </bpmn:intermediateThrowEvent>
     <bpmn:intermediateThrowEvent id="Event_0lndl5b" name="Ternim Anfrage senden">
       <bpmn:incoming>Flow_0xcwomu</bpmn:incoming>
-      <bpmn:outgoing>Flow_0rd3rrj</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1ebjsrt</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0lqethg" messageRef="Message_19i52tq" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;NeueTerminAnfrage&#34;).setVariable(&#34;Datum&#34;, datum).correlateWithResult()}" />
     </bpmn:intermediateThrowEvent>
     <bpmn:userTask id="Activity_1oe3uz3" name="Terminentscheidung treffen">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="terminentscheidung" label="Terminentscheidung" type="boolean" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0o0d622</bpmn:incoming>
       <bpmn:outgoing>Flow_0bthcu6</bpmn:outgoing>
     </bpmn:userTask>
@@ -98,7 +98,7 @@
       <bpmn:incoming>Flow_0zi53fy</bpmn:incoming>
       <bpmn:outgoing>Flow_1xgf1fq</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0qfg2kl">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">Pt60S</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:intermediateCatchEvent id="Event_0mmy3cf" name="Stornierung erhalten">
@@ -122,41 +122,46 @@
     <bpmn:endEvent id="Event_1f7xjff" name="Kunde hat Termin nicht wahrgenommen">
       <bpmn:incoming>Flow_0wxx0vt</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_0f0jxi9" name="Termin eintragen">
-      <bpmn:incoming>Flow_1dw6pl1</bpmn:incoming>
-      <bpmn:outgoing>Flow_1xz4xue</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:boundaryEvent id="Event_03he34v" name="24 stunden" attachedToRef="Activity_1oe3uz3">
       <bpmn:outgoing>Flow_0cvxdz8</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0xyeyrn">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1h5m4cv" sourceRef="Gateway_0gj4t9e" targetRef="Event_1rfnnme" />
     <bpmn:sequenceFlow id="Flow_1p1u7pn" sourceRef="Gateway_0gj4t9e" targetRef="Event_1m7tcli" />
     <bpmn:sequenceFlow id="Flow_0o0d622" sourceRef="Event_1rfnnme" targetRef="Activity_1oe3uz3" />
-    <bpmn:sequenceFlow id="Flow_0ciazft" sourceRef="Event_1m7tcli" targetRef="Gateway_0azonc7" />
     <bpmn:sequenceFlow id="Flow_0bthcu6" sourceRef="Activity_1oe3uz3" targetRef="Gateway_1eyvgx5" />
     <bpmn:sequenceFlow id="Flow_1qtt45s" name="Ja" sourceRef="Gateway_1eyvgx5" targetRef="Event_18syvev">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">true</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${terminentscheidung==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0cvxdz8" sourceRef="Event_03he34v" targetRef="Gateway_1amz3g0" />
     <bpmn:sequenceFlow id="Flow_1mn4c68" sourceRef="Gateway_1amz3g0" targetRef="Event_0epp1ej" />
     <bpmn:sequenceFlow id="Flow_1rdzvmc" name="Nein" sourceRef="Gateway_1eyvgx5" targetRef="Gateway_1amz3g0">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">false</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${terminentscheidung==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1dw6pl1" sourceRef="Gateway_0azonc7" targetRef="Activity_0f0jxi9" />
-    <bpmn:sequenceFlow id="Flow_15rlarp" sourceRef="Event_18syvev" targetRef="Gateway_0azonc7" />
-    <bpmn:sequenceFlow id="Flow_0rd3rrj" sourceRef="Event_0lndl5b" targetRef="Gateway_0gj4t9e" />
     <bpmn:sequenceFlow id="Flow_1n4ex1j" sourceRef="StartEvent_1" targetRef="Activity_1i1b3ts" />
     <bpmn:sequenceFlow id="Flow_0xcwomu" sourceRef="Activity_1i1b3ts" targetRef="Event_0lndl5b" />
     <bpmn:sequenceFlow id="Flow_0zi53fy" sourceRef="Gateway_0nzgd2f" targetRef="Event_0i566so" />
-    <bpmn:sequenceFlow id="Flow_1xz4xue" sourceRef="Activity_0f0jxi9" targetRef="Gateway_0nzgd2f" />
     <bpmn:sequenceFlow id="Flow_1bswtm4" sourceRef="Gateway_0nzgd2f" targetRef="Event_0mmy3cf" />
     <bpmn:sequenceFlow id="Flow_1qwvixh" sourceRef="Event_0mmy3cf" targetRef="Event_088terw" />
     <bpmn:sequenceFlow id="Flow_0xawqm3" sourceRef="Event_088terw" targetRef="Event_1pgjg5c" />
     <bpmn:sequenceFlow id="Flow_1xgf1fq" sourceRef="Event_0i566so" targetRef="Event_0bz9cui" />
     <bpmn:sequenceFlow id="Flow_0wxx0vt" sourceRef="Event_1pgjg5c" targetRef="Event_1f7xjff" />
+    <bpmn:userTask id="Activity_0f0jxi9" name="Termin eintragen">
+      <bpmn:incoming>Flow_0ciazft</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xz4xue</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1xz4xue" sourceRef="Activity_0f0jxi9" targetRef="Gateway_0nzgd2f" />
+    <bpmn:sequenceFlow id="Flow_15rlarp" sourceRef="Event_18syvev" targetRef="Gateway_0g8ia6v" />
+    <bpmn:sequenceFlow id="Flow_0ciazft" sourceRef="Event_1m7tcli" targetRef="Activity_0f0jxi9" />
+    <bpmn:sequenceFlow id="Flow_1ebjsrt" sourceRef="Event_0lndl5b" targetRef="Gateway_0g8ia6v" />
+    <bpmn:sequenceFlow id="Flow_0l3q82s" sourceRef="Gateway_0g8ia6v" targetRef="Gateway_0gj4t9e" />
+    <bpmn:exclusiveGateway id="Gateway_0g8ia6v">
+      <bpmn:incoming>Flow_1ebjsrt</bpmn:incoming>
+      <bpmn:incoming>Flow_15rlarp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0l3q82s</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
   </bpmn:process>
   <bpmn:process id="terminueberpruefungsprozess" isExecutable="true">
     <bpmn:intermediateCatchEvent id="Event_13zbttv" name="Termin zusage erhalten">
@@ -166,8 +171,8 @@
     </bpmn:intermediateCatchEvent>
     <bpmn:exclusiveGateway id="Gateway_1u4r0ws" name="Termin valide?">
       <bpmn:incoming>Flow_01duwuj</bpmn:incoming>
-      <bpmn:outgoing>Flow_0sk8cgo</bpmn:outgoing>
       <bpmn:outgoing>Flow_1azv528</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0sk8cgo</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="Activity_1wxbus6" name="Termin überprüfen und ggf. Alternativtermin vorschlagen">
       <bpmn:extensionElements>
@@ -192,12 +197,8 @@
       <bpmn:incoming>Flow_1cc1ap8</bpmn:incoming>
       <bpmn:outgoing>Flow_1f3xat2</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sendTask id="Activity_0i2064v" name="Alternativterminerstellen und senden" camunda:class="edu.thi.java.servicetask.AlternativTerminVorschlaege">
-      <bpmn:incoming>Flow_0sk8cgo</bpmn:incoming>
-      <bpmn:outgoing>Flow_1umzxiw</bpmn:outgoing>
-    </bpmn:sendTask>
     <bpmn:eventBasedGateway id="Gateway_1aod6y4">
-      <bpmn:incoming>Flow_1umzxiw</bpmn:incoming>
+      <bpmn:incoming>Flow_0sxed8t</bpmn:incoming>
       <bpmn:outgoing>Flow_1voi322</bpmn:outgoing>
       <bpmn:outgoing>Flow_0aiobdx</bpmn:outgoing>
     </bpmn:eventBasedGateway>
@@ -206,9 +207,6 @@
       <bpmn:outgoing>Flow_0cvae6o</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0umw59b" messageRef="Message_0vpt2nf" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:endEvent id="Event_000uu3b" name="Termin ist abgesagt">
-      <bpmn:incoming>Flow_0cvae6o</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0uvrbm1">
       <bpmn:incoming>Flow_1acjkyi</bpmn:incoming>
       <bpmn:incoming>Flow_19buspg</bpmn:incoming>
@@ -297,7 +295,7 @@
       <bpmn:intermediateThrowEvent id="Event_0lj2bho" name="Terminbestätigung senden">
         <bpmn:incoming>Flow_1fw6w8d</bpmn:incoming>
         <bpmn:outgoing>Flow_1ltpr9t</bpmn:outgoing>
-        <bpmn:messageEventDefinition id="MessageEventDefinition_19o35l2" messageRef="Message_1y6bq67" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminBestätigung&#34;).correlateWithResult()}" />
+        <bpmn:messageEventDefinition id="MessageEventDefinition_19o35l2" messageRef="Message_1y6bq67" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;terminBestaetigung&#34;).correlateWithResult()}" />
       </bpmn:intermediateThrowEvent>
       <bpmn:manualTask id="Activity_00yiknj" name="Termin durchführen">
         <bpmn:incoming>Flow_1iv7082</bpmn:incoming>
@@ -373,6 +371,10 @@
       <bpmn:incoming>Flow_0lwcc4z</bpmn:incoming>
       <bpmn:outgoing>Flow_1acjkyi</bpmn:outgoing>
       <bpmn:startEvent id="Event_11i0wfi">
+        <bpmn:extensionElements>
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;completionCondition&#34;,false)}" event="start" />
+          <camunda:executionListener expression="${execution.setVariableLocal(&#34;cancelRemainingInstances&#34;,true)}" event="start" />
+        </bpmn:extensionElements>
         <bpmn:outgoing>Flow_066zwlu</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_066zwlu" sourceRef="Event_11i0wfi" targetRef="Gateway_0n9wtdf" />
@@ -402,7 +404,7 @@
         <bpmn:startEvent id="Event_1oiq5nk" name="completion condition true" isInterrupting="false">
           <bpmn:outgoing>Flow_17vu5ge</bpmn:outgoing>
           <bpmn:conditionalEventDefinition id="ConditionalEventDefinition_043cefv">
-            <bpmn:condition xsi:type="bpmn:tFormalExpression" />
+            <bpmn:condition xsi:type="bpmn:tFormalExpression">${completionCondition}</bpmn:condition>
           </bpmn:conditionalEventDefinition>
         </bpmn:startEvent>
         <bpmn:exclusiveGateway id="Gateway_0gpyjge" name="Cancel remaining instances?">
@@ -414,11 +416,15 @@
         <bpmn:endEvent id="Event_0ufu0sl">
           <bpmn:incoming>Flow_0448cl3</bpmn:incoming>
         </bpmn:endEvent>
-        <bpmn:sequenceFlow id="Flow_0448cl3" name="Nein" sourceRef="Gateway_0gpyjge" targetRef="Event_0ufu0sl" />
-        <bpmn:sequenceFlow id="Flow_0mp9m3n" name="Ja" sourceRef="Gateway_0gpyjge" targetRef="Event_1049mug" />
+        <bpmn:sequenceFlow id="Flow_0448cl3" name="Nein" sourceRef="Gateway_0gpyjge" targetRef="Event_0ufu0sl">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${completionCondition==false}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+        <bpmn:sequenceFlow id="Flow_0mp9m3n" name="Ja" sourceRef="Gateway_0gpyjge" targetRef="Event_1049mug">
+          <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${completionCondition==true}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
         <bpmn:endEvent id="Event_1049mug" name="Fallbearbeitung abbrechen">
           <bpmn:incoming>Flow_0mp9m3n</bpmn:incoming>
-          <bpmn:escalationEventDefinition id="EscalationEventDefinition_0l2wi9g" escalationRef="Escalation_0lae22h" />
+          <bpmn:escalationEventDefinition id="EscalationEventDefinition_0l2wi9g" escalationRef="Escalation_1r7w8n7" />
         </bpmn:endEvent>
       </bpmn:subProcess>
       <bpmn:userTask id="Activity_11ts7mp" name="Mitarbeiter befragen">
@@ -440,18 +446,14 @@
     </bpmn:boundaryEvent>
     <bpmn:boundaryEvent id="Event_0ipsv2h" name="Fallbearbeitung abbrechen" attachedToRef="Activity_1649qma">
       <bpmn:outgoing>Flow_19buspg</bpmn:outgoing>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0k99n5f" escalationRef="Escalation_0lae22h" />
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0k99n5f" escalationRef="Escalation_1r7w8n7" camunda:escalationCodeVariable="escalationCode" />
     </bpmn:boundaryEvent>
     <bpmn:boundaryEvent id="Event_03ey2vx" attachedToRef="Activity_1njsp1d">
       <bpmn:outgoing>Flow_1qrycnz</bpmn:outgoing>
       <bpmn:cancelEventDefinition id="CancelEventDefinition_0h9lw7g" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1umzxiw" sourceRef="Activity_0i2064v" targetRef="Gateway_1aod6y4" />
     <bpmn:sequenceFlow id="Flow_0lgtjqa" sourceRef="Event_00weci7" targetRef="Activity_1wxbus6" />
     <bpmn:sequenceFlow id="Flow_01duwuj" sourceRef="Activity_1wxbus6" targetRef="Gateway_1u4r0ws" />
-    <bpmn:sequenceFlow id="Flow_0sk8cgo" name="Nein" sourceRef="Gateway_1u4r0ws" targetRef="Activity_0i2064v">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validierung==false}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1voi322" sourceRef="Gateway_1aod6y4" targetRef="Event_1n0bztz" />
     <bpmn:sequenceFlow id="Flow_0cvae6o" sourceRef="Event_1n0bztz" targetRef="Event_000uu3b" />
     <bpmn:sequenceFlow id="Flow_0aiobdx" sourceRef="Gateway_1aod6y4" targetRef="Event_13zbttv" />
@@ -478,18 +480,46 @@
     <bpmn:sequenceFlow id="Flow_018zf8b" sourceRef="Activity_0yr29xp" targetRef="Gateway_0susn0v" />
     <bpmn:sequenceFlow id="Flow_0nd18y8" sourceRef="Gateway_0susn0v" targetRef="Event_1jxqrzu" />
     <bpmn:sequenceFlow id="Flow_1qrycnz" sourceRef="Event_03ey2vx" targetRef="Event_1xk8ht4" />
+    <bpmn:sequenceFlow id="Flow_0sk8cgo" name="Nein" sourceRef="Gateway_1u4r0ws" targetRef="Activity_0m9o16r">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validierung==false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_18gf4hc" sourceRef="Activity_0m9o16r" targetRef="Event_0xniwda" />
+    <bpmn:sequenceFlow id="Flow_0sxed8t" sourceRef="Event_0xniwda" targetRef="Gateway_1aod6y4" />
+    <bpmn:intermediateThrowEvent id="Event_0xniwda">
+      <bpmn:incoming>Flow_18gf4hc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0sxed8t</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1yn2ghd" messageRef="Message_0q37n7i" camunda:expression="${execution.getProcessEngineServices().getRuntimeService().createMessageCorrelation(&#34;AlternativTermin&#34;).setVariable(&#34;Alternativ Datum&#34;, alternativDatum).correlateWithResult()}" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:userTask id="Activity_0m9o16r" name="Alternativtermin bestimmen">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="alternativDatum" label="Alternativ Datum" type="date">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0sk8cgo</bpmn:incoming>
+      <bpmn:outgoing>Flow_18gf4hc</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_000uu3b" name="Termin ist abgesagt">
+      <bpmn:incoming>Flow_0cvae6o</bpmn:incoming>
+    </bpmn:endEvent>
   </bpmn:process>
   <bpmn:message id="Message_19i52tq" name="NeueTerminAnfrage" />
   <bpmn:message id="Message_0ml8npa" name="alternativTerminVorschlag" />
   <bpmn:message id="Message_1l2d7aq" name="terminZusage" />
   <bpmn:message id="Message_0vpt2nf" name="terminAbsage" />
-  <bpmn:message id="Message_1y6bq67" name="terminBestätigung" />
+  <bpmn:message id="Message_1y6bq67" name="terminBestaetigung" />
   <bpmn:message id="Message_09kthsn" name="stornierung" />
   <bpmn:message id="Message_0cs9sn1" name="stornierungsNachricht" />
   <bpmn:message id="Message_0px3el1" name="stornierungsBestaetigung" />
   <bpmn:escalation id="Escalation_02xp1k5" name="fruehzeitigerAbbruchTermin" escalationCode="dringend1" />
   <bpmn:escalation id="Escalation_0nf0w50" name="fruehzeitgerAbbruchMitarbeiter" escalationCode="dringend2" />
   <bpmn:escalation id="Escalation_0lae22h" name="fallBearbeitungAbbrechen" escalationCode="dringend3" />
+  <bpmn:escalation id="Escalation_1r7w8n7" name="cancelAdhocTP" escalationCode="cancelAdhocTP" />
+  <bpmn:message id="Message_0q37n7i" name="AlternativTermin" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Buchungsprozess">
       <bpmndi:BPMNShape id="Participant_0nzzd8e_di" bpmnElement="Participant_0nzzd8e" isHorizontal="true">
@@ -533,17 +563,11 @@
         <di:waypoint x="318" y="400" />
         <di:waypoint x="370" y="400" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0rd3rrj_di" bpmnElement="Flow_0rd3rrj">
-        <di:waypoint x="528" y="400" />
-        <di:waypoint x="745" y="400" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15rlarp_di" bpmnElement="Flow_15rlarp">
-        <di:waypoint x="1540" y="318" />
-        <di:waypoint x="1540" y="395" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1dw6pl1_di" bpmnElement="Flow_1dw6pl1">
-        <di:waypoint x="1565" y="420" />
-        <di:waypoint x="1630" y="420" />
+        <di:waypoint x="1540" y="282" />
+        <di:waypoint x="1540" y="220" />
+        <di:waypoint x="640" y="220" />
+        <di:waypoint x="640" y="375" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rdzvmc_di" bpmnElement="Flow_1rdzvmc">
         <di:waypoint x="1350" y="325" />
@@ -575,7 +599,8 @@
       <bpmndi:BPMNEdge id="Flow_0ciazft_di" bpmnElement="Flow_0ciazft">
         <di:waypoint x="1048" y="510" />
         <di:waypoint x="1540" y="510" />
-        <di:waypoint x="1540" y="445" />
+        <di:waypoint x="1540" y="420" />
+        <di:waypoint x="1630" y="420" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0o0d622_di" bpmnElement="Flow_0o0d622">
         <di:waypoint x="1128" y="300" />
@@ -590,6 +615,14 @@
         <di:waypoint x="770" y="375" />
         <di:waypoint x="770" y="300" />
         <di:waypoint x="1092" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ebjsrt_di" bpmnElement="Flow_1ebjsrt">
+        <di:waypoint x="528" y="400" />
+        <di:waypoint x="615" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0l3q82s_di" bpmnElement="Flow_0l3q82s">
+        <di:waypoint x="665" y="400" />
+        <di:waypoint x="745" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="282" y="382" width="36" height="36" />
@@ -627,13 +660,10 @@
           <dc:Bounds x="1434" y="372" width="73" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0azonc7_di" bpmnElement="Gateway_0azonc7" isMarkerVisible="true">
-        <dc:Bounds x="1515" y="395" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0zvcx9a_di" bpmnElement="Event_18syvev">
         <dc:Bounds x="1522" y="282" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1504" y="252" width="72" height="27" />
+          <dc:Bounds x="1504" y="327.5" width="72" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1fz1x9y_di" bpmnElement="Event_0lndl5b">
@@ -689,6 +719,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_016mrjd_di" bpmnElement="Activity_0f0jxi9">
         <dc:Bounds x="1630" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0g8ia6v_di" bpmnElement="Gateway_0g8ia6v" isMarkerVisible="true">
+        <dc:Bounds x="615" y="375" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1am0et9_di" bpmnElement="Event_03he34v">
         <dc:Bounds x="1192" y="322" width="36" height="36" />
@@ -800,9 +833,9 @@
       <bpmndi:BPMNEdge id="Flow_0sk8cgo_di" bpmnElement="Flow_0sk8cgo">
         <di:waypoint x="630" y="1045" />
         <di:waypoint x="630" y="910" />
-        <di:waypoint x="1060" y="910" />
+        <di:waypoint x="760" y="910" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="634" y="975" width="23" height="14" />
+          <dc:Bounds x="658" y="919" width="23" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_01duwuj_di" bpmnElement="Flow_01duwuj">
@@ -813,8 +846,12 @@
         <di:waypoint x="318" y="1070" />
         <di:waypoint x="440" y="1070" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1umzxiw_di" bpmnElement="Flow_1umzxiw">
-        <di:waypoint x="1160" y="910" />
+      <bpmndi:BPMNEdge id="Flow_18gf4hc_di" bpmnElement="Flow_18gf4hc">
+        <di:waypoint x="860" y="910" />
+        <di:waypoint x="1092" y="910" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sxed8t_di" bpmnElement="Flow_0sxed8t">
+        <di:waypoint x="1128" y="910" />
         <di:waypoint x="1335" y="910" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_13zbttv_di" bpmnElement="Event_13zbttv">
@@ -840,9 +877,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1us038x_di" bpmnElement="Gateway_1us038x" isMarkerVisible="true">
         <dc:Bounds x="725" y="1045" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0p3jths_di" bpmnElement="Activity_0i2064v">
-        <dc:Bounds x="1060" y="870" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1qx3iwh_di" bpmnElement="Gateway_1aod6y4">
         <dc:Bounds x="1335" y="885" width="50" height="50" />
@@ -897,6 +931,12 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_085t7tn_di" bpmnElement="Activity_0x2953a">
         <dc:Bounds x="2770" y="1360" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03z6b2x_di" bpmnElement="Event_0xniwda">
+        <dc:Bounds x="1092" y="892" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_10dxy9n_di" bpmnElement="Activity_0m9o16r">
+        <dc:Bounds x="760" y="870" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1njsp1d_di" bpmnElement="Activity_1njsp1d" isExpanded="true">
         <dc:Bounds x="350" y="1160" width="1170" height="500" />
@@ -1180,7 +1220,7 @@
         <dc:Bounds x="160" y="80" width="3110" height="60" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0zlq9kj_di" bpmnElement="Flow_0zlq9kj">
-        <di:waypoint x="1110" y="870" />
+        <di:waypoint x="1110" y="892" />
         <di:waypoint x="1110" y="318" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0n3fg72_di" bpmnElement="Flow_0n3fg72">
