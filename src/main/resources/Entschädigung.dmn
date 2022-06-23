@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="entschaedigung" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
-  <decision id="Decision_04crs40" name="Entschädigung">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="entschaedigungID" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+  <decision id="entschaedigung" name="Entschädigung">
     <informationRequirement id="InformationRequirement_1jhsgiv">
       <requiredInput href="#InputData_0l8zpoh" />
     </informationRequirement>
     <decisionTable id="DecisionTable_0lmtt92">
-      <input id="InputClause_1tllc1k" label="Kundenstatus">
+      <input id="InputClause_1tllc1k" label="Kundenstatus" camunda:inputVariable="status">
         <inputExpression id="LiteralExpression_1lzqn3y" typeRef="string">
           <text></text>
         </inputExpression>
       </input>
-      <output id="Output_1" label="Entschädigung" typeRef="double" />
+      <output id="Output_1" label="Entschaedigung" name="rabatt" typeRef="double" />
       <rule id="DecisionRule_0zhiz88">
         <description>20% Gutschein für die nächste Buchung</description>
         <inputEntry id="UnaryTests_03yw0hr">
-          <text>Gold</text>
+          <text>"Gold"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_1o0pxsk">
           <text>0.2</text>
@@ -23,7 +23,7 @@
       <rule id="DecisionRule_01or2pg">
         <description>10% Gutschein für die nächste Buchung</description>
         <inputEntry id="UnaryTests_0fnnxfi">
-          <text>Silber</text>
+          <text>"Silber"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0sc4juv">
           <text>0.1</text>
@@ -32,7 +32,7 @@
       <rule id="DecisionRule_0hushn7">
         <description>5% Gutschein für die nächste Buchung</description>
         <inputEntry id="UnaryTests_1vxcr0r">
-          <text>Bronze</text>
+          <text>"Bronze"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0rncptc">
           <text>0.05</text>
@@ -40,7 +40,7 @@
       </rule>
       <rule id="DecisionRule_0kj20o7">
         <inputEntry id="UnaryTests_06dxzpo">
-          <text>Neu</text>
+          <text>"Neu"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_02hcgko">
           <text>0</text>
@@ -51,7 +51,7 @@
   <inputData id="InputData_0l8zpoh" name="Kundenstatus" />
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
-      <dmndi:DMNShape dmnElementRef="Decision_04crs40">
+      <dmndi:DMNShape dmnElementRef="entschaedigung">
         <dc:Bounds height="80" width="180" x="160" y="100" />
       </dmndi:DMNShape>
       <dmndi:DMNShape id="DMNShape_08gb2xf" dmnElementRef="InputData_0l8zpoh">
