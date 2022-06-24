@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_0fy7qzg" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
-  <decision id="Decision_10uhf24" name="Kompensation">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_0fy7qzg" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <decision id="kompensation" name="Kompensation">
     <informationRequirement id="InformationRequirement_112gdh4">
       <requiredInput href="#InputData_1gcwzsb" />
     </informationRequirement>
@@ -8,22 +8,22 @@
       <requiredInput href="#InputData_1a59s8z" />
     </informationRequirement>
     <decisionTable id="DecisionTable_123icks">
-      <input id="Input_1" label="Vorlaufzeit">
+      <input id="Input_1" label="Vorlaufzeit" camunda:inputVariable="vorlaufzeit">
         <inputExpression id="InputExpression_1" typeRef="integer">
-          <text></text>
+          <text>vorlaufzeit</text>
         </inputExpression>
       </input>
-      <input id="InputClause_059nu1n" label="Vorlaufzeit">
+      <input id="InputClause_059nu1n" label="Vorlaufzeit" camunda:inputVariable="vorlaufzeit">
         <inputExpression id="LiteralExpression_0xdph95" typeRef="integer">
-          <text></text>
+          <text>vorlaufzeit</text>
         </inputExpression>
       </input>
-      <input id="InputClause_0gu6yk8" label="Kundenstatus">
+      <input id="InputClause_0gu6yk8" label="Kundenstatus" camunda:inputVariable="kundenStatus">
         <inputExpression id="LiteralExpression_0r746qp" typeRef="string">
-          <text></text>
+          <text>kundenStatus</text>
         </inputExpression>
       </input>
-      <output id="Output_1" label="Kompensation" typeRef="double" />
+      <output id="Output_1" label="Kompensation" name="kompensation" typeRef="double" />
       <rule id="DecisionRule_15lhbpn">
         <inputEntry id="UnaryTests_1uy42lc">
           <text>&lt;14</text>
@@ -142,7 +142,7 @@
   <inputData id="InputData_1a59s8z" name="Kundenstatus" />
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
-      <dmndi:DMNShape dmnElementRef="Decision_10uhf24">
+      <dmndi:DMNShape dmnElementRef="kompensation">
         <dc:Bounds height="80" width="180" x="280" y="100" />
       </dmndi:DMNShape>
       <dmndi:DMNShape id="DMNShape_19hapvp" dmnElementRef="InputData_1gcwzsb">
