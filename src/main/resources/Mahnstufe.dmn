@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="mahnstufeID" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
-  <decision id="Decision_02qpnd0" name="Mahnstufe">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="mahnstufe" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <decision id="mahnstufeID" name="Mahnstufe">
     <informationRequirement id="InformationRequirement_07i1z5d">
       <requiredInput href="#InputData_0qldrkk" />
     </informationRequirement>
     <decisionTable id="DecisionTable_0lzfobe">
-      <input id="InputClause_1taxgia" label="Mahnstufe">
+      <input id="InputClause_1taxgia" label="Mahnstufe" camunda:inputVariable="Mahnstufe">
         <inputExpression id="LiteralExpression_1f1v747" typeRef="integer">
           <text></text>
         </inputExpression>
@@ -43,7 +43,7 @@
   <inputData id="InputData_0qldrkk" name="Mahnstufe" />
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
-      <dmndi:DMNShape dmnElementRef="Decision_02qpnd0">
+      <dmndi:DMNShape dmnElementRef="mahnstufeID">
         <dc:Bounds height="80" width="180" x="160" y="100" />
       </dmndi:DMNShape>
       <dmndi:DMNShape id="DMNShape_1bb7z9i" dmnElementRef="InputData_0qldrkk">

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mbdor" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mbdor" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Zahlungsabwicklungsprozess">
-    <bpmn:participant id="Participant_028mkd9" name="Zahlungsabwicklungsprozess (Dienstleisterseite)" processRef="Process_00n783y" />
+    <bpmn:participant id="Participant_028mkd9" name="Zahlungsabwicklungsprozess (Dienstleisterseite)" processRef="zahlungsabwicklungsprozess" />
     <bpmn:participant id="Participant_0a3n413" name="Kunde" />
     <bpmn:messageFlow id="Flow_17oo9rd" sourceRef="Participant_0a3n413" targetRef="Activity_0e7r696" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_00n783y" isExecutable="true">
+  <bpmn:process id="zahlungsabwicklungsprozess" isExecutable="true">
     <bpmn:laneSet id="LaneSet_0tuzx0n">
       <bpmn:lane id="Lane_0o4ipce" name="Dienstleister">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
@@ -122,7 +122,7 @@
             </bpmn:extensionElements>
             <bpmn:outgoing>Flow_02ez7qw</bpmn:outgoing>
             <bpmn:timerEventDefinition id="TimerEventDefinition_1fyloel">
-              <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R3/PT10S</bpmn:timeCycle>
+              <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R3/PT5M</bpmn:timeCycle>
             </bpmn:timerEventDefinition>
           </bpmn:startEvent>
         </bpmn:subProcess>

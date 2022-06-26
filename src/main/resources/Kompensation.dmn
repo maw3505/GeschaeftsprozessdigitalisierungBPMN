@@ -8,19 +8,19 @@
       <requiredInput href="#InputData_1a59s8z" />
     </informationRequirement>
     <decisionTable id="DecisionTable_123icks">
-      <input id="Input_1" label="Vorlaufzeit" camunda:inputVariable="vorlaufzeit">
+      <input id="Input_1" label="Vorlaufzeit" camunda:inputVariable="Vorlaufzeit">
         <inputExpression id="InputExpression_1" typeRef="integer">
-          <text>vorlaufzeit</text>
+          <text>Vorlaufzeit</text>
         </inputExpression>
       </input>
-      <input id="InputClause_059nu1n" label="Vorlaufzeit" camunda:inputVariable="vorlaufzeit">
+      <input id="InputClause_059nu1n" label="Vorlaufzeit" camunda:inputVariable="Vorlaufzeit">
         <inputExpression id="LiteralExpression_0xdph95" typeRef="integer">
-          <text>vorlaufzeit</text>
+          <text>Vorlaufzeit</text>
         </inputExpression>
       </input>
-      <input id="InputClause_0gu6yk8" label="Kundenstatus" camunda:inputVariable="kundenStatus">
+      <input id="InputClause_0gu6yk8" label="Kundenstatus" camunda:inputVariable="Kundenstatus">
         <inputExpression id="LiteralExpression_0r746qp" typeRef="string">
-          <text>kundenStatus</text>
+          <text>Kundenstatus</text>
         </inputExpression>
       </input>
       <output id="Output_1" label="Kompensation" name="kompensation" typeRef="double" />
@@ -32,7 +32,7 @@
           <text>&gt;7</text>
         </inputEntry>
         <inputEntry id="UnaryTests_0egubk9">
-          <text>Gold</text>
+          <text>"Gold"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0r1i1bk">
           <text>0</text>
@@ -46,7 +46,7 @@
           <text>&gt;7</text>
         </inputEntry>
         <inputEntry id="UnaryTests_18t15ek">
-          <text>Silber</text>
+          <text>"Silber"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_03dosfm">
           <text>0.1</text>
@@ -60,7 +60,7 @@
           <text>&gt;7</text>
         </inputEntry>
         <inputEntry id="UnaryTests_0y98v6z">
-          <text>Bronze</text>
+          <text>"Bronze"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_13k01fi">
           <text>0.2</text>
@@ -74,7 +74,7 @@
           <text></text>
         </inputEntry>
         <inputEntry id="UnaryTests_1t6ee8z">
-          <text>Gold</text>
+          <text>"Gold"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_12xyc28">
           <text>0.1</text>
@@ -88,7 +88,7 @@
           <text></text>
         </inputEntry>
         <inputEntry id="UnaryTests_02i68o0">
-          <text>Silber</text>
+          <text>"Silber"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_156r06i">
           <text>0.2</text>
@@ -102,7 +102,7 @@
           <text></text>
         </inputEntry>
         <inputEntry id="UnaryTests_1gi0q3r">
-          <text>Bronze</text>
+          <text>"Bronze"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_1ozas03">
           <text>0.3</text>
@@ -116,7 +116,7 @@
           <text></text>
         </inputEntry>
         <inputEntry id="UnaryTests_0kqrbll">
-          <text>Neu</text>
+          <text>"Neu"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0gnqo2s">
           <text>0.5</text>
