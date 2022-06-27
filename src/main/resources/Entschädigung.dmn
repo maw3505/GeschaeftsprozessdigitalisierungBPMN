@@ -5,7 +5,7 @@
       <requiredInput href="#InputData_0l8zpoh" />
     </informationRequirement>
     <decisionTable id="DecisionTable_0lmtt92">
-      <input id="InputClause_1tllc1k" label="Kundenstatus" camunda:inputVariable="status">
+      <input id="InputClause_1tllc1k" label="Kundenstatus" camunda:inputVariable="kunde.status">
         <inputExpression id="LiteralExpression_1lzqn3y" typeRef="string">
           <text></text>
         </inputExpression>
