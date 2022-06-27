@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mbdor" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mbdor" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Zahlungsabwicklungsprozess">
     <bpmn:participant id="Participant_028mkd9" name="Zahlungsabwicklungsprozess (Dienstleisterseite)" processRef="zahlungsabwicklungsprozess" />
     <bpmn:participant id="Participant_0a3n413" name="Kunde" />
@@ -11,9 +11,9 @@
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Activity_1cgkkc8</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_02cd4ec</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Activity_0yx7ad5</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0ucae51</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_0ijgoy1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Activity_0yx7ad5</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1">
@@ -33,8 +33,8 @@
         <bpmn:incoming>Flow_10m5vs5</bpmn:incoming>
         <bpmn:escalationEventDefinition id="EscalationEventDefinition_03rldqv" escalationRef="Escalation_1cqcmjt" />
       </bpmn:endEvent>
-      <bpmn:exclusiveGateway id="Gateway_0pfjnj8">
-        <bpmn:incoming>Flow_1lv1mh6</bpmn:incoming>
+      <bpmn:exclusiveGateway id="Gateway_0pfjnj8" name="Vollständiger Betrag überwiesen?">
+        <bpmn:incoming>Flow_1uipvym</bpmn:incoming>
         <bpmn:outgoing>Flow_0w2azqi</bpmn:outgoing>
         <bpmn:outgoing>Flow_0c0dpm1</bpmn:outgoing>
       </bpmn:exclusiveGateway>
@@ -42,32 +42,14 @@
         <bpmn:incoming>Flow_0w2azqi</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0w2azqi" name="Ja" sourceRef="Gateway_0pfjnj8" targetRef="Event_03tq6j7">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Rechnung == 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${rechnung == 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_0c0dpm1" name="Nein" sourceRef="Gateway_0pfjnj8" targetRef="Activity_01rc82k">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${Rechnung &gt; 0}</bpmn:conditionExpression>
+      <bpmn:sequenceFlow id="Flow_0c0dpm1" name="Nein" sourceRef="Gateway_0pfjnj8" targetRef="Event_1uhanzk">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${rechnung &gt; 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:endEvent id="Event_1uhanzk" name="Restbetrag offen">
-        <bpmn:incoming>Flow_17t4l0c</bpmn:incoming>
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_17t4l0c" sourceRef="Activity_01rc82k" targetRef="Event_1uhanzk" />
-      <bpmn:userTask id="Activity_01rc82k" name="Neue Rechnung mit Restbetrag generieren">
         <bpmn:incoming>Flow_0c0dpm1</bpmn:incoming>
-        <bpmn:outgoing>Flow_17t4l0c</bpmn:outgoing>
-      </bpmn:userTask>
-      <bpmn:userTask id="Activity_1noi8mh" name="Rechnung senden">
-        <bpmn:extensionElements>
-          <camunda:formData>
-            <camunda:formField id="rechnungsbetrag" label="Rechnungsbetrag" type="long">
-              <camunda:validation>
-                <camunda:constraint name="required" />
-              </camunda:validation>
-            </camunda:formField>
-          </camunda:formData>
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0z4eqv9</bpmn:incoming>
-        <bpmn:outgoing>Flow_0eky8s9</bpmn:outgoing>
-      </bpmn:userTask>
+      </bpmn:endEvent>
       <bpmn:subProcess id="Activity_1ds2v09" name="Zahlungseingangsteilprozess">
         <bpmn:incoming>Flow_0eky8s9</bpmn:incoming>
         <bpmn:outgoing>Flow_1lv1mh6</bpmn:outgoing>
@@ -136,9 +118,27 @@
         <bpmn:outgoing>Flow_10m5vs5</bpmn:outgoing>
         <bpmn:escalationEventDefinition id="EscalationEventDefinition_0912smr" escalationRef="Escalation_197cqbp" />
       </bpmn:boundaryEvent>
-      <bpmn:sequenceFlow id="Flow_1lv1mh6" sourceRef="Activity_1ds2v09" targetRef="Gateway_0pfjnj8" />
+      <bpmn:sequenceFlow id="Flow_1lv1mh6" sourceRef="Activity_1ds2v09" targetRef="Activity_0gdpv4f" />
       <bpmn:sequenceFlow id="Flow_10m5vs5" sourceRef="Event_1g06sm1" targetRef="Event_1kb9m02" />
       <bpmn:sequenceFlow id="Flow_0eky8s9" sourceRef="Activity_1noi8mh" targetRef="Activity_1ds2v09" />
+      <bpmn:sequenceFlow id="Flow_1uipvym" sourceRef="Activity_0gdpv4f" targetRef="Gateway_0pfjnj8" />
+      <bpmn:serviceTask id="Activity_0gdpv4f" name="Restbetrag berechnen" camunda:class="edu.thi.java.servicetask.RestbetragBerechnen">
+        <bpmn:incoming>Flow_1lv1mh6</bpmn:incoming>
+        <bpmn:outgoing>Flow_1uipvym</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:userTask id="Activity_1noi8mh" name="Rechnung senden">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="rechnung" label="Rechung" type="long">
+              <camunda:validation>
+                <camunda:constraint name="readonly" config="1" />
+              </camunda:validation>
+            </camunda:formField>
+          </camunda:formData>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0z4eqv9</bpmn:incoming>
+        <bpmn:outgoing>Flow_0eky8s9</bpmn:outgoing>
+      </bpmn:userTask>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0vsb6ae" sourceRef="StartEvent_1" targetRef="Activity_0yx7ad5" />
     <bpmn:sequenceFlow id="Flow_0fk46ki" sourceRef="Activity_0yx7ad5" targetRef="Activity_1cgkkc8" />
@@ -151,18 +151,13 @@
     <bpmn:endEvent id="Event_02cd4ec" name="Zahlung erhalten">
       <bpmn:incoming>Flow_0g5uhsc</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Activity_0yx7ad5" name="Rechnung generieren">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="Rechnung" label="Rechnung" type="long" />
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0vsb6ae</bpmn:incoming>
-      <bpmn:outgoing>Flow_0fk46ki</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:endEvent id="Event_0ijgoy1" name="Klage einführen">
       <bpmn:incoming>Flow_1lugwm6</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0yx7ad5" name="Rechnung generieren" camunda:class="edu.thi.java.servicetask.RechnungGenerieren">
+      <bpmn:incoming>Flow_0vsb6ae</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fk46ki</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:message id="Message_02iagit" name="zahlung-${execution.getBusinessKey()}" />
   <bpmn:escalation id="Escalation_197cqbp" name="LetzteMahnung" escalationCode="dringend" />
@@ -197,6 +192,9 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="252" y="682" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1pbxvu2_di" bpmnElement="Activity_0yx7ad5">
+        <dc:Bounds x="340" y="660" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1cgkkc8_di" bpmnElement="Activity_1cgkkc8" isExpanded="true">
         <dc:Bounds x="547" y="280" width="1733" height="840" />
       </bpmndi:BPMNShape>
@@ -210,15 +208,12 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lv1mh6_di" bpmnElement="Flow_1lv1mh6">
         <di:waypoint x="1800" y="760" />
-        <di:waypoint x="2025" y="760" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_17t4l0c_di" bpmnElement="Flow_17t4l0c">
-        <di:waypoint x="2100" y="880" />
-        <di:waypoint x="2162" y="880" />
+        <di:waypoint x="1840" y="760" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0c0dpm1_di" bpmnElement="Flow_0c0dpm1">
         <di:waypoint x="2050" y="785" />
-        <di:waypoint x="2050" y="840" />
+        <di:waypoint x="2050" y="880" />
+        <di:waypoint x="2162" y="880" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2054" y="810" width="23" height="14" />
         </bpmndi:BPMNLabel>
@@ -234,6 +229,10 @@
         <di:waypoint x="623" y="700" />
         <di:waypoint x="680" y="700" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uipvym_di" bpmnElement="Flow_1uipvym">
+        <di:waypoint x="1940" y="760" />
+        <di:waypoint x="2025" y="760" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1pdg50s_di" bpmnElement="Event_1pdg50s">
         <dc:Bounds x="587" y="682" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -245,6 +244,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0pfjnj8_di" bpmnElement="Gateway_0pfjnj8" isMarkerVisible="true">
         <dc:Bounds x="2025" y="735" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1968" y="705" width="63" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_03tq6j7_di" bpmnElement="Event_03tq6j7">
         <dc:Bounds x="2162" y="742" width="36" height="36" />
@@ -258,10 +260,10 @@
           <dc:Bounds x="2139" y="905" width="82" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_10lhbni_di" bpmnElement="Activity_01rc82k">
-        <dc:Bounds x="2000" y="840" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_03izqoy_di" bpmnElement="Activity_0gdpv4f">
+        <dc:Bounds x="1840" y="720" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1vm6lbc_di" bpmnElement="Activity_1noi8mh">
+      <bpmndi:BPMNShape id="Activity_06eq7ih_di" bpmnElement="Activity_1noi8mh">
         <dc:Bounds x="680" y="660" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ds2v09_di" bpmnElement="Activity_1ds2v09" isExpanded="true">
@@ -366,9 +368,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2329" y="725" width="83" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0rgqnar_di" bpmnElement="Activity_0yx7ad5">
-        <dc:Bounds x="340" y="660" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_01ydg3v_di" bpmnElement="Event_0ijgoy1">
         <dc:Bounds x="2352" y="372" width="36" height="36" />
