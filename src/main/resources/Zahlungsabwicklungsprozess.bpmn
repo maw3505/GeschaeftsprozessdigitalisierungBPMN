@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mbdor" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mbdor" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.12.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.15.0">
   <bpmn:collaboration id="Zahlungsabwicklungsprozess">
     <bpmn:participant id="Participant_028mkd9" name="Zahlungsabwicklungsprozess (Dienstleisterseite)" processRef="zahlungsabwicklungsprozess" />
     <bpmn:participant id="Participant_0a3n413" name="Kunde" />
@@ -20,13 +20,10 @@
       <bpmn:outgoing>Flow_0vsb6ae</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:subProcess id="Activity_1cgkkc8" name="Rechnungs- und Mahnungsteilprozess">
-      <bpmn:extensionElements>
-        <camunda:executionListener expression="${execution.setVariableLocal(&#34;x&#34;, &#34;ok&#34;)}" event="start" />
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0fk46ki</bpmn:incoming>
       <bpmn:outgoing>Flow_0g5uhsc</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
-        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">99999999</bpmn:loopCardinality>
+        <bpmn:loopCardinality xsi:type="bpmn:tFormalExpression">100</bpmn:loopCardinality>
         <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">${x=="Ende"}</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
       <bpmn:startEvent id="Event_1pdg50s">
@@ -157,6 +154,9 @@
     <bpmn:sequenceFlow id="Flow_0g5uhsc" sourceRef="Activity_1cgkkc8" targetRef="Event_02cd4ec" />
     <bpmn:sequenceFlow id="Flow_1lugwm6" sourceRef="Event_0ucae51" targetRef="Event_0ijgoy1" />
     <bpmn:serviceTask id="Activity_0yx7ad5" name="Rechnung generieren" camunda:class="edu.thi.java.servicetask.RechnungGenerieren">
+      <bpmn:extensionElements>
+        <camunda:executionListener expression="execution.setVariable(&#34;x&#34;, &#34;ok&#34;)" event="end" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0vsb6ae</bpmn:incoming>
       <bpmn:outgoing>Flow_0fk46ki</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -203,18 +203,6 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="252" y="682" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_02cd4ec_di" bpmnElement="Event_02cd4ec">
-        <dc:Bounds x="2482" y="682" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2459" y="725" width="83" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_01ydg3v_di" bpmnElement="Event_0ijgoy1">
-        <dc:Bounds x="2482" y="372" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2461" y="415" width="78" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1cgkkc8_di" bpmnElement="Activity_1cgkkc8" isExpanded="true">
         <dc:Bounds x="547" y="280" width="1853" height="840" />
@@ -386,6 +374,18 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1pbxvu2_di" bpmnElement="Activity_0yx7ad5">
         <dc:Bounds x="340" y="660" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02cd4ec_di" bpmnElement="Event_02cd4ec">
+        <dc:Bounds x="2482" y="682" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2459" y="725" width="83" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01ydg3v_di" bpmnElement="Event_0ijgoy1">
+        <dc:Bounds x="2482" y="372" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2461" y="415" width="78" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0ja1kvy_di" bpmnElement="Event_0ucae51">
         <dc:Bounds x="2382" y="372" width="36" height="36" />

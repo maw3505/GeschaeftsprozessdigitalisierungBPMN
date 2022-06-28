@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="entschaedigungID" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="entschaedigungID" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
   <decision id="entschaedigung" name="Entschädigung">
     <informationRequirement id="InformationRequirement_1jhsgiv">
       <requiredInput href="#InputData_0l8zpoh" />
     </informationRequirement>
     <decisionTable id="DecisionTable_0lmtt92">
-      <input id="InputClause_1tllc1k" label="Kundenstatus" camunda:inputVariable="kunde.status">
+      <input id="InputClause_1tllc1k" label="Kundenstatus" camunda:inputVariable="kundenstatus">
         <inputExpression id="LiteralExpression_1lzqn3y" typeRef="string">
-          <text></text>
+          <text>kundenstatus</text>
         </inputExpression>
       </input>
-      <output id="Output_1" label="Entschaedigung" name="rabatt" typeRef="double" />
+      <output id="Output_1" label="Entschaedigung" name="rabatt" typeRef="integer" biodi:width="192" />
       <rule id="DecisionRule_0zhiz88">
         <description>20% Gutschein für die nächste Buchung</description>
         <inputEntry id="UnaryTests_03yw0hr">
           <text>"Gold"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_1o0pxsk">
-          <text>0.2</text>
+          <text>20</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_01or2pg">
@@ -26,7 +26,7 @@
           <text>"Silber"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0sc4juv">
-          <text>0.1</text>
+          <text>10</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0hushn7">
@@ -35,7 +35,7 @@
           <text>"Bronze"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0rncptc">
-          <text>0.05</text>
+          <text>5</text>
         </outputEntry>
       </rule>
       <rule id="DecisionRule_0kj20o7">
