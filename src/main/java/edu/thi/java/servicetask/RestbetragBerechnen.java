@@ -18,7 +18,6 @@ public class RestbetragBerechnen implements JavaDelegate {
 			System.out.println("Es muss noch " + restbetrag + "€ gezahlt werden");
 		}
 		execution.setVariable("rechnung", restbetrag);
-		System.out.println("Test Restbetrag");
 	}
 
 }
