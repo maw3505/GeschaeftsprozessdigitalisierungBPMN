@@ -9,7 +9,6 @@ public class MahnungErhoehen implements JavaDelegate {
 	public void execute(DelegateExecution execution) throws Exception {
 
 		execution.setVariable("Mahnstufe",(Integer) execution.getVariable("Mahnstufe")+1);
-		System.out.println(execution.getVariable("Mahnstufe"));
 	}
 
 }

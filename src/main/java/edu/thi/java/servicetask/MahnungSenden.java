@@ -1,9 +1,5 @@
 package edu.thi.java.servicetask;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -16,11 +12,14 @@ public class MahnungSenden implements JavaDelegate{
 		
 		long rechnungsbetrag = (long) execution.getVariableLocal("Rechnungsbetrag");
 		
-		long mahngebuehr = rechnungsbetrag + 15;
-		
-		execution.setVariable("rechnung", mahngebuehr);
-
-		System.out.println("Mahnstufe: " + execution.getVariable("Mahnstufe") + " deshalb Rechnungsbetrag: " +mahngebuehr);
+		if((Integer) execution.getVariable("Mahnstufe")>1) {
+			long mahngebuehr = rechnungsbetrag + 15;
+			execution.setVariable("rechnung", mahngebuehr);
+			System.out.println("Mahnstufe: " + execution.getVariable("Mahnstufe") + " deshalb Rechnungsbetrag: " +mahngebuehr);
+		}
+		else {
+			System.out.println("Zahlungserinnerung wurde gesendet");
+		}
 
 	}
 
