@@ -352,9 +352,9 @@
       </bpmn:intermediateCatchEvent>
       <bpmn:sequenceFlow id="Flow_0zimnf3" sourceRef="Gateway_19iq3oh" targetRef="Event_0v1dglb" />
       <bpmn:sequenceFlow id="Flow_048cpgt" sourceRef="Event_0v1dglb" targetRef="Event_19s8ao3" />
-      <bpmn:endEvent id="Event_19s8ao3">
+      <bpmn:endEvent id="Event_19s8ao3" name="Dienstleister Stornierung">
         <bpmn:incoming>Flow_048cpgt</bpmn:incoming>
-        <bpmn:escalationEventDefinition id="EscalationEventDefinition_08ockvw" />
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_08ockvw" escalationRef="Escalation_0d5isv7" />
       </bpmn:endEvent>
       <bpmn:association id="Association_04gvr0c" associationDirection="One" sourceRef="Event_1fu51b8" targetRef="Activity_05hms8c" />
       <bpmn:association id="Association_14566zs" associationDirection="One" sourceRef="Event_0px1g33" targetRef="Activity_1jmn77r" />
@@ -411,20 +411,26 @@
           <camunda:formField id="auswertung" label="Auswertung" type="enum">
             <camunda:value id="entschaedigung" name="Entschädigung" />
             <camunda:value id="zahlungsAbwicklung" name="Zahlungsabwicklung" />
+            <camunda:value id="end" name="End" />
+          </camunda:formField>
+          <camunda:formField id="kompensationsBetrag" label="Kompensationsbetrag" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" config="1" />
+            </camunda:validation>
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14t7cpx</bpmn:incoming>
       <bpmn:outgoing>Flow_08rvz5j</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_1nofmr9" name="Ergebnis?" default="Flow_0t2w7ui">
+    <bpmn:exclusiveGateway id="Gateway_1nofmr9" name="Ergebnis?">
       <bpmn:incoming>Flow_08rvz5j</bpmn:incoming>
       <bpmn:outgoing>Flow_0em0a2y</bpmn:outgoing>
       <bpmn:outgoing>Flow_1ripbjc</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0t2w7ui</bpmn:outgoing>
+      <bpmn:outgoing>quit</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Gateway_0susn0v">
-      <bpmn:incoming>Flow_0t2w7ui</bpmn:incoming>
+      <bpmn:incoming>quit</bpmn:incoming>
       <bpmn:incoming>Flow_13mpqjd</bpmn:incoming>
       <bpmn:incoming>Flow_018zf8b</bpmn:incoming>
       <bpmn:outgoing>Flow_0nd18y8</bpmn:outgoing>
@@ -432,19 +438,32 @@
     <bpmn:endEvent id="Event_1jxqrzu" name="Termin nicht durchgeführt">
       <bpmn:incoming>Flow_0nd18y8</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:callActivity id="Activity_1r2deg4" name="Zahlungswabwicklungsprozess" calledElement="Zahlungsabwicklungsprozess">
+    <bpmn:callActivity id="Activity_1r2deg4" name="Zahlungswabwicklungsprozess" calledElement="zahlungsabwicklungsprozess">
+      <bpmn:extensionElements>
+        <camunda:in source="kompensationsBetrag" target="rechnung" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ripbjc</bpmn:incoming>
       <bpmn:outgoing>Flow_13mpqjd</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:userTask id="Activity_0yr29xp" name="Entschädigen">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="rabatt" label="Rabatt" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" config="1" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ejk34d</bpmn:incoming>
       <bpmn:outgoing>Flow_018zf8b</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_0x2953a" name="Entschädigung">
-      <bpmn:incoming>Flow_0em0a2y</bpmn:incoming>
-      <bpmn:outgoing>Flow_0ejk34d</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:subProcess id="Activity_1649qma" name="Stornierungsbefragungsprozess">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="kompensationsBetrag">${kompensationspreis}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0zgkgyg</bpmn:incoming>
       <bpmn:outgoing>Flow_1acjkyi</bpmn:outgoing>
       <bpmn:startEvent id="Event_11i0wfi">
@@ -505,6 +524,12 @@
         </bpmn:endEvent>
       </bpmn:subProcess>
       <bpmn:userTask id="Activity_11ts7mp" name="Mitarbeiter befragen">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="completionCondition" label="Fall gelöst?" type="boolean" />
+            <camunda:formField id="kompensationspreis" label="Kompensationspreis" type="long" />
+          </camunda:formData>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_0fe37kh</bpmn:incoming>
         <bpmn:outgoing>Flow_015k4fo</bpmn:outgoing>
       </bpmn:userTask>
@@ -526,12 +551,14 @@
     <bpmn:sequenceFlow id="Flow_14t7cpx" sourceRef="Gateway_0uvrbm1" targetRef="Activity_0276802" />
     <bpmn:sequenceFlow id="Flow_08rvz5j" sourceRef="Activity_0276802" targetRef="Gateway_1nofmr9" />
     <bpmn:sequenceFlow id="Flow_0em0a2y" name="Entschädigung" sourceRef="Gateway_1nofmr9" targetRef="Activity_0x2953a">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${auswertung==entschaedigung}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${auswertung=="entschaedigung"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1ripbjc" name="Komensation" sourceRef="Gateway_1nofmr9" targetRef="Activity_1r2deg4">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${auswertung==zahlungsAbwicklung}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_1ripbjc" name="Kompensation" sourceRef="Gateway_1nofmr9" targetRef="Activity_1r2deg4">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${auswertung=="zahlungsAbwicklung"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0t2w7ui" sourceRef="Gateway_1nofmr9" targetRef="Gateway_0susn0v" />
+    <bpmn:sequenceFlow id="quit" name="Keine Entschädigung oder Kompensation nötig" sourceRef="Gateway_1nofmr9" targetRef="Gateway_0susn0v">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${auswertung=="end"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_13mpqjd" sourceRef="Activity_1r2deg4" targetRef="Gateway_0susn0v" />
     <bpmn:sequenceFlow id="Flow_018zf8b" sourceRef="Activity_0yr29xp" targetRef="Gateway_0susn0v" />
     <bpmn:sequenceFlow id="Flow_0nd18y8" sourceRef="Gateway_0susn0v" targetRef="Event_1jxqrzu" />
@@ -574,7 +601,6 @@
     </bpmn:endEvent>
     <bpmn:callActivity id="Activity_0ppud1k" name="Zahlungsabwicklungsprozess" calledElement="zahlungsabwicklungsprozess">
       <bpmn:extensionElements>
-        <camunda:in source="kompensationsergebnis" target="kompensation" />
         <camunda:in source="Kunde" target="kunde" />
         <camunda:in source="Kundenstatus" target="kundenstatus" />
         <camunda:in source="preis" target="rechnung" />
@@ -588,15 +614,19 @@
     <bpmn:endEvent id="Event_18cwhb2" name="Termin durchgeführt und Rechnung beglichen">
       <bpmn:incoming>Flow_0x0ygoa</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:boundaryEvent id="Event_0cu047o" attachedToRef="Activity_1njsp1d">
+    <bpmn:boundaryEvent id="Event_0cu047o" name="Dienstleister Stornierung" attachedToRef="Activity_1njsp1d">
       <bpmn:outgoing>Flow_1045yo4</bpmn:outgoing>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_12ibokk" />
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_12ibokk" escalationRef="Escalation_0d5isv7" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1045yo4" sourceRef="Event_0cu047o" targetRef="Event_0uuw3v4" />
-    <bpmn:endEvent id="Event_0uuw3v4">
+    <bpmn:endEvent id="Event_0uuw3v4" name="Dienstleister hat storniert">
       <bpmn:incoming>Flow_1045yo4</bpmn:incoming>
       <bpmn:terminateEventDefinition id="TerminateEventDefinition_1wk8vea" />
     </bpmn:endEvent>
+    <bpmn:businessRuleTask id="Activity_0x2953a" name="Entschädigung" camunda:resultVariable="rabatt" camunda:decisionRef="entschaedigung" camunda:mapDecisionResult="singleEntry">
+      <bpmn:incoming>Flow_0em0a2y</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ejk34d</bpmn:outgoing>
+    </bpmn:businessRuleTask>
   </bpmn:process>
   <bpmn:message id="Message_19i52tq" name="NeueTerminAnfrage" />
   <bpmn:message id="Message_0ml8npa" name="alternativTerminVorschlag" />
@@ -616,6 +646,7 @@
   <bpmn:message id="Message_1qnsisg" name="TerminfruehPostman" />
   <bpmn:message id="Message_1hf96vm" name="Informationsanfrage" />
   <bpmn:message id="Message_08alaps" name="stornierungDienstleister" />
+  <bpmn:escalation id="Escalation_0d5isv7" name="dienstleisterStornierung" escalationCode="storniert" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Buchungsprozess">
       <bpmndi:BPMNShape id="Participant_0nzzd8e_di" bpmnElement="Participant_0nzzd8e" isHorizontal="true">
@@ -828,6 +859,11 @@
       <bpmndi:BPMNShape id="Participant_0a8kwji_di" bpmnElement="Participant_0a8kwji" isHorizontal="true">
         <dc:Bounds x="160" y="720" width="3298" height="1100" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1045yo4_di" bpmnElement="Flow_1045yo4">
+        <di:waypoint x="1440" y="1678" />
+        <di:waypoint x="1440" y="1740" />
+        <di:waypoint x="1512" y="1740" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0x0ygoa_di" bpmnElement="Flow_0x0ygoa">
         <di:waypoint x="1690" y="1220" />
         <di:waypoint x="1822" y="1220" />
@@ -868,16 +904,19 @@
         <di:waypoint x="3200" y="1610" />
         <di:waypoint x="3200" y="1525" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0t2w7ui_di" bpmnElement="Flow_0t2w7ui">
+      <bpmndi:BPMNEdge id="Flow_0t2w7ui_di" bpmnElement="quit">
         <di:waypoint x="2885" y="1500" />
         <di:waypoint x="3175" y="1500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2953" y="1477" width="73" height="66" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ripbjc_di" bpmnElement="Flow_1ripbjc">
         <di:waypoint x="2860" y="1525" />
         <di:waypoint x="2860" y="1610" />
         <di:waypoint x="2980" y="1610" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2873" y="1565" width="65" height="14" />
+          <dc:Bounds x="2870" y="1565" width="71" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0em0a2y_di" bpmnElement="Flow_0em0a2y">
@@ -964,11 +1003,6 @@
         <di:waypoint x="318" y="1070" />
         <di:waypoint x="440" y="1070" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1045yo4_di" bpmnElement="Flow_1045yo4">
-        <di:waypoint x="1440" y="1678" />
-        <di:waypoint x="1440" y="1740" />
-        <di:waypoint x="1512" y="1740" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_13zbttv_di" bpmnElement="Event_13zbttv">
         <dc:Bounds x="1572" y="962" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -1002,8 +1036,8 @@
           <dc:Bounds x="1434" y="835" width="73" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_04d8xoc_di" bpmnElement="Event_0uuw3v4">
-        <dc:Bounds x="1512" y="1722" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_15u8b7h_di" bpmnElement="Activity_0x2953a">
+        <dc:Bounds x="2920" y="1360" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1njsp1d_di" bpmnElement="Activity_1njsp1d" isExpanded="true">
         <dc:Bounds x="350" y="1160" width="1170" height="500" />
@@ -1159,6 +1193,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_03wjvts_di" bpmnElement="Event_19s8ao3">
         <dc:Bounds x="1092" y="1522" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1081" y="1565" width="61" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_05rl567_di" bpmnElement="Event_06chzom">
         <dc:Bounds x="457" y="1402" width="36" height="36" />
@@ -1227,9 +1264,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0m1lf7y_di" bpmnElement="Activity_0yr29xp">
         <dc:Bounds x="3060" y="1360" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_085t7tn_di" bpmnElement="Activity_0x2953a">
-        <dc:Bounds x="2920" y="1360" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1649qma_di" bpmnElement="Activity_1649qma" isExpanded="true">
         <dc:Bounds x="1750" y="1250" width="810" height="500" />
@@ -1378,6 +1412,18 @@
           <dc:Bounds x="1858" y="1183" width="84" height="53" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04d8xoc_di" bpmnElement="Event_0uuw3v4">
+        <dc:Bounds x="1512" y="1722" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1491" y="1765" width="80" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gtej8o_di" bpmnElement="Event_0cu047o">
+        <dc:Bounds x="1422" y="1642" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1410" y="1685" width="61" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_18svu3f_di" bpmnElement="Event_1bmh9kf">
         <dc:Bounds x="1502" y="1412" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -1398,9 +1444,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1acxhjc_di" bpmnElement="Event_03ey2vx">
         <dc:Bounds x="1502" y="1142" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0gtej8o_di" bpmnElement="Event_0cu047o">
-        <dc:Bounds x="1422" y="1642" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Participant_14a1vcm_di" bpmnElement="Participant_17odgng" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="1860" height="60" />

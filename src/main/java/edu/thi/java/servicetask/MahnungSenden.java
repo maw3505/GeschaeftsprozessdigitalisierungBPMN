@@ -17,8 +17,10 @@ public class MahnungSenden implements JavaDelegate{
 		long rechnungsbetrag = (long) execution.getVariableLocal("Rechnungsbetrag");
 		
 		long mahngebuehr = rechnungsbetrag + 15;
+		
+		execution.setVariable("rechnung", mahngebuehr);
 
-		System.out.println();
+		System.out.println("Mahnstufe: " + execution.getVariable("Mahnstufe") + " deshalb Rechnungsbetrag: " +mahngebuehr);
 
 	}
 
